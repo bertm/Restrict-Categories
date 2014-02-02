@@ -494,9 +494,9 @@ class RestrictCategories{
 		// Clean up the category list
 		$this->cat_list = rtrim( $categories, ',' );
 
-		// If there are no categories, don't do anything
-		if ( empty( $this->cat_list ) )
-			return;
+        if ( trim( $this->cat_list ) == "" ) {
+            $this->cat_list = get_option( 'default_category' );
+        }
 
 		global $pagenow;
 
@@ -520,16 +520,17 @@ class RestrictCategories{
 	 * @return $query array Sets 'category__in' query_var with an array of category IDs
 	 */
 	public function posts_query( $query ){
-		if ( $this->cat_list !== '' ) {
-			// Build an array for the categories
-			$cat_list_array = explode( ',', $this->cat_list );
+		// Build an array for the categories
+		$cat_list_array = array_intersect(
+		    explode( ',', $this->cat_list ),
+		    array( get_option( 'default_category' ) )
+	    );
 
-			// Make sure the posts are removed by default or if filter category is ran
-			if ( ! isset( $_REQUEST['cat'] ) )
-				$query->set( 'category__in', $cat_list_array );
-			elseif( isset( $_REQUEST['cat'] ) && $_REQUEST['cat'] == '0' )
-				$query->set( 'category__in', $cat_list_array );
-		}
+		// Make sure the posts are removed by default or if filter category is ran
+		if ( ! isset( $_REQUEST['cat'] ) )
+			$query->set( 'category__in', $cat_list_array );
+		elseif( isset( $_REQUEST['cat'] ) && $_REQUEST['cat'] == '0' )
+			$query->set( 'category__in', $cat_list_array );
 
 		return $query;
 	}
@@ -543,7 +544,8 @@ class RestrictCategories{
 	 * @return $excluded string Appended clause on WHERE of get_taxonomy
 	 */
 	public function exclusions(){
-		$excluded = " AND ( t.term_id IN ( $this->cat_list ) OR tt.taxonomy NOT IN ( 'category' ) )";
+	    $default_cat = get_option( 'default_category' );
+		$excluded = " AND ( t.term_id IN ( $this->cat_list , $default_cat ) OR tt.taxonomy NOT IN ( 'category' ) )";
 
 		return $excluded;
 	}
@@ -867,9 +869,13 @@ class RestrictCats_Walker_Category_Checklist extends Walker {
 
 	function start_el( &$output, $category, $depth = 0, $args = array(), $current_object_id = 0 ) {
 		extract($args);
+		
+		$default_cat = get_option( 'default_category' );
 
 		if ( empty( $taxonomy ) )
 			$taxonomy = 'category';
+	    
+	    $is_default_cat = $category->term_id == $default_cat;
 
 		$output .= sprintf(
 			'<li id="%4$s-category-%1$d"><label class="selectit"><input value="%2$s" type="checkbox" name="%3$s[%4$s][]" %5$s %6$s /> %7$s</label>',
@@ -877,8 +883,8 @@ class RestrictCats_Walker_Category_Checklist extends Walker {
 			$category->slug,
 			$options_name,
 			$admin,
-			checked( in_array( $category->slug, $selected_cats ), true, false ),
-			( $disabled === true ? 'disabled="disabled"' : '' ),
+			checked( in_array( $category->slug, $selected_cats ) || $is_default_cat, true, false ),
+			( $disabled === true || $is_default_cat ? 'disabled="disabled"' : '' ),
 			esc_html( apply_filters( 'the_category', $category->name ) )
 		);
 	}
