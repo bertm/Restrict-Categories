@@ -3,7 +3,7 @@
 Plugin Name: Restrict Categories
 Description: Restrict the categories that users can view, add, and edit in the admin panel.
 Author: Matthew Muro, Bert Massop
-Author URI: https://github.com/bertm/Restrict-Categories
+Author URI: https://github.com/rubiscode/Restrict-Categories
 Version: 2.6.3
 */
 
