@@ -1,6 +1,5 @@
 === Restrict Categories ===
-Contributors: mmuro
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=G87A9UN9CLPH4&lc=US&item_name=Restrict%20Categories&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
+Contributors: mmuro, bertm
 Tags: restrict, admin, administration, cms, categories, category
 Requires at least: 3.1
 Tested up to: 3.8.1
@@ -32,16 +31,11 @@ No.  This plugin only affects logged in users in the admin panel.
 
 = I messed up and somehow prevented the Administrator account from seeing certain categories! =
 
-Restrict Categories is an opt-in plugin.  By default, every role has access to every category, depending on the capabilities.
-If you check a category box in a certain role, such as Administrator, you will <em>restrict</em> that role to viewing only those categories.
+This fork of Restrict Categories has strict behaviour.  By default, no role can post in any category except for the default one: every category is restricted.
+If you check a category box in a certain role, such as Administrator, you will lift the restriction for this category/role combination.
 
-To fix this, go to <em>Settings > Restrict Categories</em>, uncheck <em>all</em> boxes under the Administrator account and save your changes.  You can also click the Reset button to reset all changes to the default configuration.
+To fix this, go to <em>Settings > Restrict Categories</em>, check <em>all</em> boxes under the Administrator account and save your changes.  You can also click the Reset button to reset all changes to the default configuration.
 
-= How does it work when I've selected categories for a role AND a user? =
-
-Selecting categories for a user will <em>override</em> the categories you've selected for that user's role.
-
-In other words, Restrict Categories allows you complete control over groups of users while also allowing you to selectively change a setting for a single user.
 
 == Screenshots ==
 

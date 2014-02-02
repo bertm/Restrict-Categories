@@ -2,8 +2,8 @@
 /*
 Plugin Name: Restrict Categories
 Description: Restrict the categories that users can view, add, and edit in the admin panel.
-Author: Matthew Muro
-Author URI: http://matthewmuro.com
+Author: Matthew Muro, Bert Massop
+Author URI: https://github.com/bertm/Restrict-Categories
 Version: 2.6.3
 */
 
